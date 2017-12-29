@@ -92,11 +92,10 @@ class Builder
         $path = resource_path("builders/$type");
         $createFile = function($filename, CommentTemplate $template, $e, $p) {
             $content = $template->evaluate($this->o, $e);
-            dump($filename);
-            dump(implode('', $content));
+            file_put_contents($filename, implode('', $content));
         };
         $createFolder = function($dirname, $template, $e, $p) use(&$createFile, &$createFolder) {
-            dump("mkdir: $dirname");
+            mkdir($dirname, 0755, true);
             $this->glob($p, $createFile, $createFolder, $dirname);
         };
         $this->glob($path, $createFile, $createFolder, $target);
